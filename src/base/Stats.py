@@ -9,31 +9,26 @@ The general form for the statistics will be:
 '''
 
     def __init__(self):
-        '''Base init method'''
+        '''Base init method - do not call directly'''
         self._stats = {}
-        self._average_stats = {}
 
     def __init__(self, lines):
         '''
-        Actual init method. Use this one with csv.readcsv()
+        Actual init method -
         Pass ALL lines to this method, including the first.
         '''
         self.__init__()
         # write
 
-    def __init__(self, header, lines):
+    def __init__(self, lines, header):
         '''
-        Actual init method. Use this one with csv.readCsvDict()
-        We will check if all lines are passed and ignore the first line.
+        Actual init method
+        Checks if all lines are passed and ignores the first line if necessary.
         '''
         self.__init__()
-        #
 
     def getYearStats(self, year):
         return self._stats[year]
 
     def getStatFromYear(self, year, stat):
         return self._stats[year][stat]
-
-    def getAverageStats(self):
-        return self._average_stats

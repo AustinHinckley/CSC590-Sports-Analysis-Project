@@ -28,12 +28,13 @@ Actual initialization should be done by the inheriting class(es).
     - Calling without the header assumes that the *entire* csv file is
       provided, including the first line
     - Calling with the header assumes that the csv file is being read with
-      csv.readCsvDict
+      csv.readCsvDict()
+      - The first line can be successfully ignored here
     '''
         if this._stats is not None:
-            return -1
+            return -1 # removes the need for a boolean
         if header is not None:
-            this._stats = Stats(header, lines)
+            this._stats = Stats(lines, header)
         else:
             this._stats = Stats(lines)
 
