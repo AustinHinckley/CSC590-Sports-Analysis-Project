@@ -19,7 +19,7 @@ class Stats:
 
         Examples:
             Stats(lines, None, 'pujolal01', 0) -- Gets stats for Albert Pujols (filter is player ID)
-            Stats(lines, None, 'STL', 3) -- Gets stats for St. Louis (filter is teamID)
+            Stats(lines, None, 'SLN', 3) -- Gets stats for St. Louis (filter is teamID)
         '''
         self._stats = {}
         yearx = 1    # This seems constant across files, but we could parse header if needed
