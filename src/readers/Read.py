@@ -13,16 +13,18 @@ def readdict(filename, fields = None):
     return lines
 
 def readfilter(filename, columns):
-"""
-Read the file as a regular csv, then filter the lines based on the desired
-  columns.
+    """
+    Read the file as a regular csv, then filter the lines based on the desired
+      columns.
 
-`columns` is expected to be a list of integer values that represent the column
-  numbers for the desired information.
-"""
+    `columns` is expected to be a list of integer values that represent the column
+      numbers for the desired information.
+    """
     lines = read(filename)
     newlines = []
-    for i in lines:
-        for j in columns:
-            newlines.push(lines[i][columns[j]])
+    for i in range(0, len(lines)):
+        statList = []
+        for j in range(0, len(columns)):
+            statList.append(lines[i][columns[j]])
+        newlines.append(statList)
     return newlines

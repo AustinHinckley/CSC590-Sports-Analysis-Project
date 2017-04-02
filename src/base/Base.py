@@ -1,12 +1,12 @@
-from abc import ABCMeta
-import 'Stats'
+from abc import ABCMeta, abstractmethod
+from base.Stats import *
 
 class Base(metaclass=ABCMeta):
-'''
-The base class for all teams and players, and defines the base API.
+    '''
+    The base class for all teams and players, and defines the base API.
 
-Actual initialization should be done by the inheriting class(es).
-'''
+    Actual initialization should be done by the inheriting class(es).
+    '''
 
     def __init__(self):
         self._name = ''
@@ -16,21 +16,21 @@ Actual initialization should be done by the inheriting class(es).
 
     @property
     def stats(self):
-    '''Returns the internal stats object; good for functional-style programming'''
+        '''Returns the internal stats object; good for functional-style programming'''
         return self._stats
 
     @stats.setter
     def stats(self, lines, header = None):
-    '''
-    Sets the stats object for the class. Can only be called once.
+        '''
+        Sets the stats object for the class. Can only be called once.
 
-    This function can be called with or without the header:
-    - Calling without the header assumes that the *entire* csv file is
-      provided, including the first line
-    - Calling with the header assumes that the csv file is being read with
-      csv.readCsvDict()
-      - The first line can be successfully ignored here
-    '''
+        This function can be called with or without the header:
+        - Calling without the header assumes that the *entire* csv file is
+          provided, including the first line
+        - Calling with the header assumes that the csv file is being read with
+          csv.readCsvDict()
+          - The first line can be successfully ignored here
+        '''
         if this._stats is not None:
             return -1 # removes the need for a boolean
         if header is not None:
