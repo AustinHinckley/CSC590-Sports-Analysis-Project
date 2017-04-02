@@ -31,28 +31,26 @@ class Base(metaclass=ABCMeta):
           csv.readCsvDict()
           - The first line can be successfully ignored here
         '''
-        if this._stats is not None:
+        if self._stats is not None:
             return -1 # removes the need for a boolean
-        if header is not None:
-            this._stats = Stats(lines, header)
         else:
-            this._stats = Stats(lines)
+            self._stats = Stats(lines)
 
     @property
     def name(self):
-        return this._name
+        return self._name
 
     @name.setter
     def name(self, name):
-        this._name = name
+        self._name = name
 
     @property
     def id(self):
-        return this._id
+        return self._id
 
     @id.setter
     def id(self, id):
-        this._id = id
+        self._id = id
 
     @property
     @abstractmethod
