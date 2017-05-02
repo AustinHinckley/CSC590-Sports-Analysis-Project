@@ -56,4 +56,5 @@ class Base(metaclass=ABCMeta):
         self._id = id
 
     @abstractmethod
+    def getStats(self, year, stat):
         pass
