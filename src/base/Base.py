@@ -8,9 +8,9 @@ class Base(metaclass=ABCMeta):
     Actual initialization should be done by the inheriting class(es).
     '''
 
-    def __init__(self):
-        self._name = ''
-        self._id = ''
+    def __init__(self, _id):
+        self._name = '' # add name when looking up ID
+        self._id = _id
         self._years = []
         self._stats = None # overwrite this with a Stats object
 
