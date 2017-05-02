@@ -52,14 +52,5 @@ class Base(metaclass=ABCMeta):
     def id(self, id):
         self._id = id
 
-    @property
     @abstractmethod
-    def years(self):
-        '''Must be implemented in inheriting class(es)'''
-        pass
-
-    @years.setter
-    @abstractmethod
-    def years(self, years):
-        '''Must be implemented in inheriting class(es)'''
         pass
