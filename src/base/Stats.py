@@ -50,3 +50,6 @@ class Stats:
 
     def getStatFromYear(self, year, stat):
         return self._stats[year][stat]
+
+    def getYearsActive(self):
+        return Object.keys(self._stats)
