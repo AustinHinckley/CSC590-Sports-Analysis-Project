@@ -43,17 +43,9 @@ class Base(metaclass=ABCMeta):
     def name(self):
         return self._name
 
-    @name.setter
-    def name(self, name):
-        self._name = name
-
     @property
     def id(self):
         return self._id
-
-    @id.setter
-    def id(self, id):
-        self._id = id
 
     @abstractmethod
     def getStats(self, year, stat):
