@@ -34,7 +34,10 @@ class Base(metaclass=ABCMeta):
         if self._stats is not None:
             return -1 # removes the need for a boolean
         else:
-            self._stats = Stats(lines)
+            idIndex = 0
+            if self._id.length == 3:
+                idIndex = 3
+            self._stats = Stats(lines, header, self._id, idIndex)
 
     @property
     def name(self):
