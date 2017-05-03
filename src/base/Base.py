@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from base.Stats import *
+from .Stats import Stats
 
 class Base(metaclass=ABCMeta):
     '''
