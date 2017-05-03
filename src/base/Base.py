@@ -35,7 +35,7 @@ class Base(metaclass=ABCMeta):
             return -1 # removes the need for a boolean
         else:
             idIndex = 0
-            if self._id.length == 3:
+            if len(self._id) == 3:
                 idIndex = 3
             self._stats = Stats(lines, header, self._id, idIndex)
 
