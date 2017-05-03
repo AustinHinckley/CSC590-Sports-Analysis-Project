@@ -19,8 +19,7 @@ class Base(metaclass=ABCMeta):
         '''Returns the internal stats object; good for functional-style programming'''
         return self._stats
 
-    @stats.setter
-    def stats(self, lines, header = None):
+    def setStats(self, lines, header = None):
         '''
         Sets the stats object for the class. Can only be called once.
 
