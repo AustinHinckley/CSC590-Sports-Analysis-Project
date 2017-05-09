@@ -45,8 +45,14 @@ class Stats:
                         self._stats[year][stat] = 0
                     self._stats[year][stat] += int(row[i])
 
-    def getYearStats(self, year):
-        return self._stats[year]
+    def getYearStats(self, stat):
+        years = self.getYearsActive()
+        statPerYear = []
+        for yr in years:
+            print(yr)
 
     def getStatFromYear(self, year, stat):
         return self._stats[year][stat]
+
+    def getYearsActive(self):
+        return Object.keys(self._stats)
