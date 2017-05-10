@@ -53,16 +53,16 @@ class Team(Base):
         '''Get a stat from a particular year or set of years
            If year is a list of years, it will iterate through
             the entire list
-           Returns a String or List of Strings
+           Returns List of Strings, even if there is only one element
         '''
         ans = []
         if isinstance(years, int):
             # convert it to a list
-            year = [] + year
-        for yr in year:
-            ans += [self._stats.getStatFromYear(year[yr], stat)]
-        if len(ans) == 1:
-            return ans[0]
+            years = list(years)
+        for yr in years:
+            # dev guard to prevent unnecessary TypeErrors
+            if self._stats is not None:
+                ans.append(self._stats.getStatFromYear(years[yr], stat))
         return ans
 
     def getStatList(self, stat):
