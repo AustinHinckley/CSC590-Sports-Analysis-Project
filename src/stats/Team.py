@@ -68,7 +68,3 @@ class Team(Base):
     def getStatList(self, stat):
         '''Get a list containing the given stat for all years'''
         return self._stats.getStatList(stat)
-
-team = Team('tst')
-# team.stats = 'test'
-print((team.stats))
