@@ -9,7 +9,7 @@ class Stats:
             -> Total number for the stat in that year
     '''
 
-    def __init__(self, lines, header = None, id = None, idIndex = None):
+    def __init__(self, lines, header=None, id=None, idIndex=None):
         '''
         Initialize stats object and populate data from lines
         Use header for stat names. If no header given, use first line in lines
@@ -22,7 +22,8 @@ class Stats:
             Stats(lines, None, 'SLN', 3) -- Gets stats for St. Louis (filter is teamID)
         '''
         self._stats = {}
-        yearx = 1    # This seems constant across files, but we could parse header if needed
+        # This seems constant across files, but we could parse header if needed
+        yearx = 1
         if header is None:
             header = lines[0]
 
@@ -45,6 +46,7 @@ class Stats:
                         self._stats[year][stat] = 0
                     self._stats[year][stat] += int(row[i])
 
+    # TODO: finish this function
     def getYearStats(self, stat):
         years = self.getYearsActive()
         statPerYear = []
@@ -55,4 +57,4 @@ class Stats:
         return self._stats[year][stat]
 
     def getYearsActive(self):
-        return Object.keys(self._stats)
+        return list(self._stats.keys())
