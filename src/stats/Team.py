@@ -37,7 +37,7 @@ if cmd_subfolder not in sys.path:
     # DO NOT USE __file__ !!!
 # __file__ fails if script is called in different ways on Windows
 # __file__ fails if someone does os.chdir() before
-# sys.argv[0] also fails because it doesn't not always contains the path
+# sys.argv[0] also fails because it doesn't always contains the path
 
 # End relative imports
 
@@ -66,10 +66,9 @@ class Team(Base):
         return ans
 
     def getStatList(self, stat):
-        '''Get a list containing the given stat for all years
-        '''
         ans = []
         return ans
+        '''Get a list containing the given stat for all years'''
 
 team = Team('tst')
 # team.stats = 'test'
