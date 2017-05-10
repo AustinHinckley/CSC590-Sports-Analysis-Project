@@ -65,6 +65,6 @@ class Team(Base):
                 ans.append(self._stats.getStatFromYear(years[yr], stat))
         return ans
 
-    def getStatList(self, stat):
+    def getStatFromAllYears(self, stat):
         '''Get a list containing the given stat for all years'''
         return self.getStats(stat, self._stats.getYearsActive())
