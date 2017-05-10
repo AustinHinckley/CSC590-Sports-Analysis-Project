@@ -49,7 +49,7 @@ class Team(Base):
     def __init__(self, _id):
         super().__init__(_id)
 
-    def getStats(self, year, stat):
+    def getStats(self, stat, years):
         '''Get a stat from a particular year or set of years
            If year is a list of years, it will iterate through
             the entire list
