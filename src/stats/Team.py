@@ -67,4 +67,4 @@ class Team(Base):
 
     def getStatList(self, stat):
         '''Get a list containing the given stat for all years'''
-        return self._stats.getStatList(stat)
+        return self.getStats(stat, self._stats.getYearsActive())
