@@ -56,7 +56,7 @@ class Team(Base):
            Returns a String or List of Strings
         '''
         ans = []
-        if type(year) is 'int':
+        if isinstance(years, int):
             # convert it to a list
             year = [] + year
         for yr in year:
