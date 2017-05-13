@@ -3,16 +3,15 @@ import tkinter as Tk
 from tkinter import *
 import matplotlib.pyplot as plt
 import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 
 # Project files/classes
 from stats.base.Stats import *
 from stats.base.Base import *
-from stats.Team import *
-from stats.Player import *
-
-# Putting these here because we might need them
-#matplotlib.user('TkAgg')
-#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+#from stats.Team import *
+#from stats.Player import *
 
 pidx, yrx, teamx = 0, 1, 3
 
@@ -286,12 +285,25 @@ class Interface:
         ''' Builds a plot from the given data and adds it to the window '''
         # Can maybe use canvas = FigureCanvasTkAgg(<Figure>, master=window)
         # Then do something like canvas.get_tk_widget().pack(...) or canvas._tkcanvas.pack(...)
-        pass
+        xStat = self.xStatVar.get()
+        yStat = self.yStatVar.get()
+
+        # Create Figure
+        fig = Figure(figsize=(5,4), dpi=100)
+        subplt = fig.add_subplot(111)
+        subplt.plot(dataX, dataY, markerColor + markerStyle)
+        subplt.set_title(xStat + " vs " + yStat)
+        subplt.set_xlabel(xStat)
+        subplt.set_ylabel(yStat)
+
+        # Get figure into window
+        canvas = FigureCanvasTkAgg(fig, master=self.root)
+        canvas.show()
+        canvas.get_tk_widget().grid(row=6, column=1, columnspan=10)
 
     def display(self):
         ''' Calls mainloop() to show the window '''
         self.root.mainloop()
-
 
     def close(self):
         ''' Closes the interface window and destroys it '''
