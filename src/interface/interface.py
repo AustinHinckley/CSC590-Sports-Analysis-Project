@@ -1,10 +1,16 @@
+# Packages
 import tkinter as Tk
 from tkinter import *
 import matplotlib.pyplot as plt
-from IPython.display import display
+import matplotlib
+
+# Project files/classes
+from stats.base.Stats import *
+from stats.base.Base import *
+from stats.Team import *
+from stats.Player import *
 
 # Putting these here because we might need them
-import matplotlib
 #matplotlib.user('TkAgg')
 #from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -229,30 +235,39 @@ class Interface:
         ''' Reads dropdown values and creates data classes as needed '''
         startYear = int(self.startYearVar.get())
         endYear = int(self.endYearVar.get())
-        team = self.teamVar.get()
-        player = self.playerVar.get()
+        teamID = self.teamVar.get()
+        pid= self.playerVar.get()
         xStat = self.xStatVar.get()
         yStat = self.yStatVar.get()
 
-        # Create objects as necessary and pass data to plotting function
+        # Create objects as necessary and pass data to plot function
         years = range(startYear, endYear + 1)
-        if player != 'All':
-            if self.player is None:
-                pass
-                # Create player
-            # Pass player data to plot function
-
-        elif team != 'All':
-            if self.team is None:
-                pass
-                # Create team
-            # Pass team data to plot function
-
+        if pid != 'All':
+            if self.player is None or self.player.id != pid:
+                self.player = Player(pid)
+                self.player.setStats(self.lines)
+            xStatList = self.player.getStatFromYearRange(xStat, years)
+            yStatList = self.player.getStatFromYearRange(yStat, years)
+            self._createPlot(xStatList, yStatList, '.', 'r')
+        elif teamID != 'All':
+            if self.team is None or self.team.id != teamID:
+                self.team = Team(teamID)
+                self.team.setStats(self.lines)
+            xStatList = self.team.getStatFromYearRange(xStat, years)
+            yStatList = self.team.getStatFromYearRange(yStat, years)
+            self._createPlot(xStatList, yStatList, '.', 'b')
         else:
+            # This is the same as getStatFromYearRange...maybe rework?
             if self.allStats is None:
-                # Create base
-                pass
-            # Pass ALL data to plot function
+                self.allStats = Stats(self.lines)    # Generic stats
+            xStatList = []
+            yStatList = []
+            for yr in years:
+                xStatList.append(self.allStats.getStatFromYear(yr, xStat))
+                yStatList.append(self.allStats.getStatFromYear(yr, yStat))
+            # xStatList = [1, 2, 3, 4, 5, 6]
+            # yStatList = [4, 8, 15, 16, 23, 42]
+            self._createPlot(xStatList, yStatList, '.', 'g')
 
 
     ''' Plot/display/misc. functions '''
@@ -267,7 +282,7 @@ class Interface:
         ''' Removes error message from the grid '''
         if (self.error): self.errorLabel.grid_forget()
 
-    def createPlot(self, dataX, dataY, markerStyle, markerColor):
+    def _createPlot(self, dataX, dataY, markerStyle, markerColor):
         ''' Builds a plot from the given data and adds it to the window '''
         # Can maybe use canvas = FigureCanvasTkAgg(<Figure>, master=window)
         # Then do something like canvas.get_tk_widget().pack(...) or canvas._tkcanvas.pack(...)
