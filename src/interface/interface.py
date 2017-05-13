@@ -20,11 +20,17 @@ class Interface:
         self.root = Tk()
         self.root.minsize(width=minWidth, height=minHeight)
         self.root.title(Interface.WINDOW_TITLE)
+
+        # Set other variables
         self.error = False
         self.errorLabel = None
+        self.team = None    # Team object
+        self.player = None    # Player object
+        self.allStats = None    # Base object
 
         # Get values from the file that will go in dropdown menus
-        self._getYearsTeamsAndPlayers(lines)
+        self.lines = lines    # It would be great to not have to do this
+        self._getYearsTeamsAndPlayers()
 
         # Build and load UI components
         self._createWidgets()
@@ -33,16 +39,16 @@ class Interface:
 
     ''' Initialization methods '''
 
-    def _getYearsTeamsAndPlayers(self, lines):
+    def _getYearsTeamsAndPlayers(self):
         ''' This method creates a nested dictionary and three lists
             The dictionary is for retrieving teams for certain years, etc.
             The lists are what is actually displayed in the menus'''
         self.yrsTeamsPlayers = {}    # 'Year' : { 'Team' : [players]}
         self.years = []
         teamSet = set()
-        if lines is not None:
+        if self.lines is not None:
             # Go through all lines and add years, teams, and players
-            for row in lines[1:]:
+            for row in self.lines[1:]:
                 year = row[yrx]
                 team = row[teamx]
                 player = row[pidx]
@@ -102,6 +108,9 @@ class Interface:
         self.yStatVar.set(Interface.STATS[1])
         self.yStatMenu = OptionMenu(self.root, self.yStatVar, *Interface.STATS)
 
+        # Plot button
+        self.plotButton = Button(self.root, text='Plot', command=self._buildData)
+
 
     def _loadWidgets(self):
         ''' Loads widgets into the root window to later be displayed with mainloop '''
@@ -131,6 +140,9 @@ class Interface:
         # Stat Y
         Label(self.root, text='Y-Axis').grid(row=2, column=4, sticky=E)
         self.yStatMenu.grid(row=2, column=5, sticky=W)
+
+        # Plot Button
+        self.plotButton.grid(row=5, column=1, columnspan=5, sticky=E, ipadx=20)
 
 
     ''' Event listeners and operations for the option menus '''
@@ -212,6 +224,36 @@ class Interface:
                 self._displayError('Please change team selection')
             elif playerChosen not in self.players:
                 self._displayError('Please change player selection')
+
+    def _buildData(self, *args):
+        ''' Reads dropdown values and creates data classes as needed '''
+        startYear = int(self.startYearVar.get())
+        endYear = int(self.endYearVar.get())
+        team = self.teamVar.get()
+        player = self.playerVar.get()
+        xStat = self.xStatVar.get()
+        yStat = self.yStatVar.get()
+
+        # Create objects as necessary and pass data to plotting function
+        years = range(startYear, endYear + 1)
+        if player != 'All':
+            if self.player is None:
+                pass
+                # Create player
+            # Pass player data to plot function
+
+        elif team != 'All':
+            if self.team is None:
+                pass
+                # Create team
+            # Pass team data to plot function
+
+        else:
+            if self.allStats is None:
+                # Create base
+                pass
+            # Pass ALL data to plot function
+
 
     ''' Plot/display/misc. functions '''
 
