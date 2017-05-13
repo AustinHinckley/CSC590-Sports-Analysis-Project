@@ -14,13 +14,23 @@ class Interface:
     ''' This class will contain the Tkinter objects and various UI-related methods '''
     WINDOW_TITLE = "Baseball Plot GUI"
 
-    def __init__(self, lines=None, minWidth=800, minHeight=600):
+    def __init__(self, lines, minWidth=800, minHeight=600):
         ''' Initialize window and user widgets '''
         self.root = Tk()
         self.root.minsize(width=minWidth, height=minHeight)
         self.root.title(Interface.WINDOW_TITLE)
 
         # Get values from the file that will go in dropdown menus
+        self.getYearsTeamsAndPlayers(lines)
+
+        # Build and load UI components
+        self._createWidgets()
+        self._loadWidgets()
+
+    def getYearsTeamsAndPlayers(self, lines):
+        ''' This method creates a nested dictionary and three lists
+            The dictionary is for retrieving teams for certain years, etc.
+            The lists are what is actually displayed in the menus'''
         self.yrsTeamsPlayers = {}    # 'Year' : { 'Team' : [players]}
         self.years = []
         self.teams = []
@@ -51,10 +61,7 @@ class Interface:
             self.years.sort()
             self.teams.sort()
             self.players.sort()
-        # End result: nested dictionary for players on all teams for all years
-        # Also have list of all possible years, teams, and players
 
-        self._createWidgets()
 
     def _createWidgets(self):
         ''' Initializes widgets in the root window '''
@@ -78,7 +85,6 @@ class Interface:
         self.playerVar.set(self.players[0])
         self.playerMenu = OptionMenu(self.root, self.playerVar, *self.players)
 
-        self._loadWidgets()
 
     def _loadWidgets(self):
         ''' Loads widgets into the root window to later be displayed with mainloop '''
@@ -98,15 +104,18 @@ class Interface:
         Label(self.root, text='Player').grid(row=1, column=9)
         self.playerMenu.grid(row=1, column=10)
 
+
     def createPlot(self, dataX, dataY, markerStyle, markerColor):
         ''' Builds a plot from the given data and adds it to the window '''
         # Can maybe use canvas = FigureCanvasTkAgg(<Figure>, master=window)
         # Then do something like canvas.get_tk_widget().pack(...) or canvas._tkcanvas.pack(...)
         pass
 
+
     def display(self):
         ''' Calls mainloop() to show the window '''
         self.root.mainloop()
+
 
     def close(self):
         ''' Closes the interface window and destroys it '''
