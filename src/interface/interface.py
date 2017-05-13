@@ -13,6 +13,7 @@ pidx, yrx, teamx = 0, 1, 3
 class Interface:
     ''' This class will contain the Tkinter objects and various UI-related methods '''
     WINDOW_TITLE = "Baseball Plot GUI"
+    STATS = ['G','AB','R','H','2B','3B','HR','RBI','SB','CS','BB','SO','HBP','GIDP']
 
     def __init__(self, lines, minWidth=800, minHeight=600):
         ''' Initialize root window and widgets '''
@@ -91,24 +92,42 @@ class Interface:
         self.playerMenu = OptionMenu(self.root, self.playerVar, *self.players)
         self.playerVar.trace('w', self._changeYearTeamPlayer)
 
+        # Stat X drop down
+        self.xStatVar = StringVar(self.root)
+        self.xStatVar.set(Interface.STATS[0])
+        self.xStatMenu = OptionMenu(self.root, self.xStatVar, *Interface.STATS)
+
+        # Stat Y drop down
+        self.yStatVar = StringVar(self.root)
+        self.yStatVar.set(Interface.STATS[1])
+        self.yStatMenu = OptionMenu(self.root, self.yStatVar, *Interface.STATS)
+
 
     def _loadWidgets(self):
         ''' Loads widgets into the root window to later be displayed with mainloop '''
         # Start year
-        Label(self.root, text='Start Year').grid(row=1, column=1)
-        self.startYearMenu.grid(row=1, column=2)
+        Label(self.root, text='Start Year').grid(row=1, column=1, sticky=E)
+        self.startYearMenu.grid(row=1, column=2, sticky=W)
 
         # End year
-        Label(self.root, text='End Year').grid(row=1, column=3)
-        self.endYearMenu.grid(row=1, column=4)
+        Label(self.root, text='End Year').grid(row=1, column=3, sticky=E)
+        self.endYearMenu.grid(row=1, column=4, sticky=W)
 
         # Team
-        Label(self.root, text='Team').grid(row=1, column=5)
-        self.teamMenu.grid(row=1, column=6)
+        Label(self.root, text='Team').grid(row=1, column=5, sticky=E)
+        self.teamMenu.grid(row=1, column=6, sticky=W)
 
         # Players
-        Label(self.root, text='Player').grid(row=1, column=7)
-        self.playerMenu.grid(row=1, column=8)
+        Label(self.root, text='Player').grid(row=1, column=7, sticky=E)
+        self.playerMenu.grid(row=1, column=8, sticky=W)
+
+        # Stat X
+        Label(self.root, text='X-Axis').grid(row=2, column=1, sticky=E)
+        self.xStatMenu.grid(row=2, column=2, sticky=W)
+
+        # Stat Y
+        Label(self.root, text='Y-Axis').grid(row=2, column=3, sticky=E)
+        self.yStatMenu.grid(row=2, column=4, sticky=W)
 
 
     ''' Event listeners and operations for the option menus '''
@@ -139,7 +158,6 @@ class Interface:
                             playerSet.add(plr)
             self.teams = ['All'] + sorted(teamSet)
             self.players = ['All'] + sorted(playerSet)
-            print(len(self.players), "players")
 
             # Get list of valid years for the selected team/playerSet
             self.years = []
@@ -184,7 +202,6 @@ class Interface:
 
             # Check for value conflicts and notify the user if necessary
             if startYear < int(self.years[0]):
-                print(self.years)
                 self._displayError('Please change start year')
             elif endYear > int(self.years[-1]):
                 self._displayError('Please change end year')
@@ -193,14 +210,13 @@ class Interface:
             elif playerChosen not in self.players:
                 self._displayError('Please change player selection')
 
-
     ''' Plot/display/misc. functions '''
 
     def _displayError(self, text):
         ''' Shows error message underneath the widgets '''
         self.error = True
         self.errorLabel = Label(self.root, text=text, fg='red')
-        self.errorLabel.grid(row=2, column=1, columnspan=10, sticky=W)
+        self.errorLabel.grid(row=3, column=1, columnspan=10, sticky=W)
 
     def _removeError(self):
         ''' Removes error message from the grid '''
