@@ -23,6 +23,8 @@ class Interface:
         # Get values from the file that will go in dropdown menus
         self.yrsTeamsPlayers = {}    # 'Year' : { 'Team' : [players]}
         self.years = []
+        self.teams = []
+        self.players = []
         if lines is not None:
             # Go through all lines and add years, teams, and players
             for row in lines[1:]:
@@ -35,12 +37,22 @@ class Interface:
                 # Add year, team, and player as necessary
                 if year not in self.yrsTeamsPlayers:
                     self.yrsTeamsPlayers[year] = {}
+                    self.years.append(year)
                 if team not in self.yrsTeamsPlayers[year]:
                     self.yrsTeamsPlayers[year][team] = []
                 if player not in self.yrsTeamsPlayers[year][team]:
                     self.yrsTeamsPlayers[year][team].append(player)
-            self.years = list(self.yrsTeamsPlayers.keys())
+
+                # Add to the initial team and players lists
+                if team not in self.teams:
+                    self.teams.append(team)
+                if player not in self.players:
+                    self.players.append(player)
+            self.years.sort()
+            self.teams.sort()
+            self.players.sort()
         # End result: nested dictionary for players on all teams for all years
+        # Also have list of all possible years, teams, and players
 
         self._createWidgets()
 
@@ -56,17 +68,35 @@ class Interface:
         self.endYearVar.set(self.years[-1])
         self.endYearMenu = OptionMenu(self.root, self.endYearVar, *self.years)
 
+        # Teams drop down
+        self.teamVar = StringVar(self.root)
+        self.teamVar.set(self.teams[0])
+        self.teamMenu = OptionMenu(self.root, self.teamVar, *self.teams)
+
+        # Players drop down
+        self.playerVar = StringVar(self.root)
+        self.playerVar.set(self.players[0])
+        self.playerMenu = OptionMenu(self.root, self.playerVar, *self.players)
+
         self._loadWidgets()
 
     def _loadWidgets(self):
         ''' Loads widgets into the root window to later be displayed with mainloop '''
+        # Start year
         Label(self.root, text='Start Year').grid(row=1, column=1)
         self.startYearMenu.grid(row=1, column=2)
+
+        # End year
         Label(self.root, text='End Year').grid(row=1, column=3)
         self.endYearMenu.grid(row=1, column=4)
 
+        # Team
+        Label(self.root, text='Team').grid(row=1, column=6)
+        self.teamMenu.grid(row=1, column=7)
 
-    # Should somehow include event listeners? Maybe?
+        # Players
+        Label(self.root, text='Player').grid(row=1, column=9)
+        self.playerMenu.grid(row=1, column=10)
 
     def createPlot(self, dataX, dataY, markerStyle, markerColor):
         ''' Builds a plot from the given data and adds it to the window '''
