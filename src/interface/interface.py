@@ -110,24 +110,27 @@ class Interface:
         self.startYearMenu.grid(row=1, column=2, sticky=W)
 
         # End year
-        Label(self.root, text='End Year').grid(row=1, column=3, sticky=E)
-        self.endYearMenu.grid(row=1, column=4, sticky=W)
+        Label(self.root, text='End Year').grid(row=2, column=1, sticky=E)
+        self.endYearMenu.grid(row=2, column=2, sticky=W)
 
         # Team
-        Label(self.root, text='Team').grid(row=1, column=5, sticky=E)
-        self.teamMenu.grid(row=1, column=6, sticky=W)
+        Label(self.root, text='Team').grid(row=3, column=1, sticky=E)
+        self.teamMenu.grid(row=3, column=2, sticky=W)
 
         # Players
-        Label(self.root, text='Player').grid(row=1, column=7, sticky=E)
-        self.playerMenu.grid(row=1, column=8, sticky=W)
+        Label(self.root, text='Player').grid(row=4, column=1, sticky=E)
+        self.playerMenu.grid(row=4, column=2, sticky=W)
+
+        # Spacer (empty space between columns)
+        Label(self.root, text='').grid(row=1, column=3, padx=20)
 
         # Stat X
-        Label(self.root, text='X-Axis').grid(row=2, column=1, sticky=E)
-        self.xStatMenu.grid(row=2, column=2, sticky=W)
+        Label(self.root, text='X-Axis').grid(row=1, column=4, sticky=E)
+        self.xStatMenu.grid(row=1, column=5, sticky=W)
 
         # Stat Y
-        Label(self.root, text='Y-Axis').grid(row=2, column=3, sticky=E)
-        self.yStatMenu.grid(row=2, column=4, sticky=W)
+        Label(self.root, text='Y-Axis').grid(row=2, column=4, sticky=E)
+        self.yStatMenu.grid(row=2, column=5, sticky=W)
 
 
     ''' Event listeners and operations for the option menus '''
