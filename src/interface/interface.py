@@ -15,26 +15,31 @@ class Interface:
     WINDOW_TITLE = "Baseball Plot GUI"
 
     def __init__(self, lines, minWidth=800, minHeight=600):
-        ''' Initialize window and user widgets '''
+        ''' Initialize root window and widgets '''
         self.root = Tk()
         self.root.minsize(width=minWidth, height=minHeight)
         self.root.title(Interface.WINDOW_TITLE)
+        self.error = False
+        self.errorLabel = None
 
         # Get values from the file that will go in dropdown menus
-        self.getYearsTeamsAndPlayers(lines)
+        self._getYearsTeamsAndPlayers(lines)
 
         # Build and load UI components
         self._createWidgets()
         self._loadWidgets()
 
-    def getYearsTeamsAndPlayers(self, lines):
+
+    ''' Initialization methods '''
+
+    def _getYearsTeamsAndPlayers(self, lines):
         ''' This method creates a nested dictionary and three lists
             The dictionary is for retrieving teams for certain years, etc.
             The lists are what is actually displayed in the menus'''
         self.yrsTeamsPlayers = {}    # 'Year' : { 'Team' : [players]}
         self.years = []
-        self.teams = []
-        self.players = []
+        teamSet = set()
+        playerSet = set()
         if lines is not None:
             # Go through all lines and add years, teams, and players
             for row in lines[1:]:
@@ -54,13 +59,12 @@ class Interface:
                     self.yrsTeamsPlayers[year][team].append(player)
 
                 # Add to the initial team and players lists
-                if team not in self.teams:
-                    self.teams.append(team)
-                if player not in self.players:
-                    self.players.append(player)
-            self.years.sort()
-            self.teams.sort()
-            self.players.sort()
+                teamSet.add(team)
+                playerSet.add(player)
+
+        # Get sorted list of teams and players
+        self.teams = ['All'] + sorted(teamSet)
+        self.players = ['All'] + sorted(playerSet)
 
 
     def _createWidgets(self):
@@ -68,23 +72,23 @@ class Interface:
         # Start year drop down
         self.startYearVar = StringVar(self.root)
         self.startYearVar.set(self.years[0])
-        self.startYearMenu = OptionMenu(self.root, self.startYearVar, *self.years)
-
+        self.startYearMenu = OptionMenu(self.root, self.startYearVar, *self.years,
+                                command=self._changeYearTeamPlayer)
         # End year drop down
         self.endYearVar = StringVar(self.root)
         self.endYearVar.set(self.years[-1])
-        self.endYearMenu = OptionMenu(self.root, self.endYearVar, *self.years)
-
+        self.endYearMenu = OptionMenu(self.root, self.endYearVar, *self.years,
+                                        command=self._changeYearTeamPlayer)
         # Teams drop down
         self.teamVar = StringVar(self.root)
         self.teamVar.set(self.teams[0])
-        self.teamMenu = OptionMenu(self.root, self.teamVar, *self.teams)
-
+        self.teamMenu = OptionMenu(self.root, self.teamVar, *self.teams,
+                                    command=self._changeYearTeamPlayer)
         # Players drop down
         self.playerVar = StringVar(self.root)
         self.playerVar.set(self.players[0])
-        self.playerMenu = OptionMenu(self.root, self.playerVar, *self.players)
-
+        self.playerMenu = OptionMenu(self.root, self.playerVar, *self.players,
+                                        command=self._changeYearTeamPlayer)
 
     def _loadWidgets(self):
         ''' Loads widgets into the root window to later be displayed with mainloop '''
@@ -104,6 +108,66 @@ class Interface:
         Label(self.root, text='Player').grid(row=1, column=9)
         self.playerMenu.grid(row=1, column=10)
 
+
+    ''' Event listeners and operations for the option menus '''
+
+    def _changeYearTeamPlayer(self, value):
+        ''' A value in a dropdown was changed, so update dropdown values as needed '''
+        startYear = int(self.startYearVar.get())
+        endYear = int(self.endYearVar.get())
+        teamChosen = self.teamVar.get()
+        playerChosen = self.playerVar.get()
+
+        if startYear > endYear:
+            self._displayError('Start date cannot be larger than end date')
+        else:
+            self._removeError()
+
+            # Get new years, teams, and players
+            self.years = []
+            teamSet = set()
+            playerSet = set()
+            for yrNum in range(startYear, endYear + 1):    # For each year in the given range
+                year = str(yrNum)
+                self.years.append(year)
+                for tm in self.yrsTeamsPlayers[year]:    # For all teams for those years
+                    if teamChosen == 'All' or tm == teamChosen:
+                        # Only add selected team unless 'All' is selected
+                        teamSet.add(tm)
+                        for plr in self.yrsTeamsPlayers[year][tm]:
+                            # For each player on the team in this year, only add selected
+                            # unless 'All' is selected
+                            if playerChosen == 'All' or plr == playerChosen:
+                                playerSet.add(plr)
+            self.teams = ['All'] + sorted(teamSet)
+            self.players = ['All'] + sorted(playerSet)
+
+            # Remove old lists from option menus
+            self.startYearMenu['menu'].delete(0, 'end')
+            self.endYearMenu['menu'].delete(0, 'end')
+            self.teamMenu['menu'].delete(0, 'end')
+            self.playerMenu['menu'].delete(0, 'end')
+
+            # Set new menu lists
+            for yr in self.years:
+                self.startYearMenu['menu'].add_command(label=yr, command=lambda v=yr: self.startYearVar.set(v))
+                self.endYearMenu['menu'].add_command(label=yr, command=lambda v=yr: self.endYearVar.set(v))
+            for tm in self.teams:
+                self.teamMenu['menu'].add_command(label=tm, command=lambda v=tm: self.teamVar.set(v))
+            for plr in self.players:
+                self.playerMenu['menu'].add_command(label=plr, command=lambda v=plr: self.playerVar.set(v))
+
+
+    ''' Plot/display/misc. functions '''
+
+    def _displayError(self, text):
+        ''' Shows error message underneath the widgets '''
+        self.error = True
+        self.errorLabel = Label(self.root, text=text, fg='red')
+
+    def _removeError(self):
+        ''' Removes error message from the grid '''
+        if (self.error): self.errorLabel.grid_forget()
 
     def createPlot(self, dataX, dataY, markerStyle, markerColor):
         ''' Builds a plot from the given data and adds it to the window '''
