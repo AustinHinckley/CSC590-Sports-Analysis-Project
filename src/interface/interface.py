@@ -22,6 +22,7 @@ class Interface:
 
         # Get values from the file that will go in dropdown menus
         self.yrsTeamsPlayers = {}    # 'Year' : { 'Team' : [players]}
+        self.years = []
         if lines is not None:
             # Go through all lines and add years, teams, and players
             for row in lines[1:]:
@@ -38,6 +39,7 @@ class Interface:
                     self.yrsTeamsPlayers[year][team] = []
                 if player not in self.yrsTeamsPlayers[year][team]:
                     self.yrsTeamsPlayers[year][team].append(player)
+            self.years = list(self.yrsTeamsPlayers.keys())
         # End result: nested dictionary for players on all teams for all years
 
         self._createWidgets()
@@ -46,20 +48,22 @@ class Interface:
         ''' Initializes widgets in the root window '''
         # Start year drop down
         self.startYearVar = StringVar(self.root)
-        self.startYearVarMenu = OptionMenu(self.root, self.startYearVar, *self.years)
         self.startYearVar.set(self.years[0])
+        self.startYearMenu = OptionMenu(self.root, self.startYearVar, *self.years)
 
         # End year drop down
         self.endYearVar = StringVar(self.root)
-        self.endYearVarMenu = OptionMenu(self.root, self.endYearVar, *self.years)
         self.endYearVar.set(self.years[-1])
+        self.endYearMenu = OptionMenu(self.root, self.endYearVar, *self.years)
 
         self._loadWidgets()
 
     def _loadWidgets(self):
         ''' Loads widgets into the root window to later be displayed with mainloop '''
-        self.yearMenu.grid(row=1, column=2)
-        self.yearLabel.grid(row=1, column=1)
+        Label(self.root, text='Start Year').grid(row=1, column=1)
+        self.startYearMenu.grid(row=1, column=2)
+        Label(self.root, text='End Year').grid(row=1, column=3)
+        self.endYearMenu.grid(row=1, column=4)
 
 
     # Should somehow include event listeners? Maybe?
