@@ -163,6 +163,7 @@ class Interface:
         playerChosen = self.playerVar.get()
 
         if startYear > endYear:
+            self._removeError()    # Don't write over an existing error
             self._displayError('Start date cannot be larger than end date')
         else:
             self._removeError()
