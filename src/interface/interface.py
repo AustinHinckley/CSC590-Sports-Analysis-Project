@@ -12,7 +12,7 @@ from scipy.stats.stats import pearsonr
 from stats.base.Stats import *
 from stats.base.Base import *
 from stats.Team import *
-#from stats.Player import *
+from stats.Player import *
 
 pidx, yrx, teamx = 0, 1, 3
 
@@ -235,6 +235,8 @@ class Interface:
 
     def _buildData(self, *args):
         ''' Reads dropdown values and creates data classes as needed '''
+        if self.error == True:
+            return    # Do nothing if there is an input error
         startYear = int(self.startYearVar.get())
         endYear = int(self.endYearVar.get())
         teamID = self.teamVar.get()
@@ -282,7 +284,9 @@ class Interface:
 
     def _removeError(self):
         ''' Removes error message from the grid '''
-        if (self.error): self.errorLabel.grid_forget()
+        if self.error:
+            self.errorLabel.grid_forget()
+            self.error = False
 
     def _createPlot(self, dataX, dataY, markerStyle, markerColor):
         ''' Builds a plot from the given data and adds it to the window '''
