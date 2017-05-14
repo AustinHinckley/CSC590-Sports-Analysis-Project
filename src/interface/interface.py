@@ -1,9 +1,9 @@
 # Packages
 import tkinter as Tk
 from tkinter import *
-import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
@@ -20,11 +20,12 @@ class Interface:
     WINDOW_TITLE = "Baseball Plot GUI"
     STATS = ['G','AB','R','H','2B','3B','HR','RBI','SB','CS','BB','SO','HBP','GIDP']
 
-    def __init__(self, lines, minWidth=800, minHeight=600):
+    def __init__(self, lines, minWidth=1000, minHeight=800):
         ''' Initialize root window and widgets '''
         self.root = Tk()
         self.root.minsize(width=minWidth, height=minHeight)
         self.root.title(Interface.WINDOW_TITLE)
+        self.canvas = None    # Canvas for plot
 
         # Set other variables
         self.error = False
@@ -147,7 +148,7 @@ class Interface:
         self.yStatMenu.grid(row=2, column=5, sticky=W)
 
         # Plot Button
-        self.plotButton.grid(row=5, column=1, columnspan=5, sticky=E, ipadx=20)
+        self.plotButton.grid(row=4, column=1, columnspan=5, sticky=E, ipadx=20)
 
 
     ''' Event listeners and operations for the option menus '''
@@ -275,7 +276,7 @@ class Interface:
         ''' Shows error message underneath the widgets '''
         self.error = True
         self.errorLabel = Label(self.root, text=text, fg='red')
-        self.errorLabel.grid(row=3, column=1, columnspan=10, sticky=W)
+        self.errorLabel.grid(row=5, column=1, columnspan=10, sticky=W)
 
     def _removeError(self):
         ''' Removes error message from the grid '''
@@ -283,23 +284,23 @@ class Interface:
 
     def _createPlot(self, dataX, dataY, markerStyle, markerColor):
         ''' Builds a plot from the given data and adds it to the window '''
-        # Can maybe use canvas = FigureCanvasTkAgg(<Figure>, master=window)
-        # Then do something like canvas.get_tk_widget().pack(...) or canvas._tkcanvas.pack(...)
         xStat = self.xStatVar.get()
         yStat = self.yStatVar.get()
 
-        # Create Figure
-        fig = Figure(figsize=(5,4), dpi=100)
+        # Create Figure and subplot
+        fig = Figure(figsize=(7,4), dpi=100)
         subplt = fig.add_subplot(111)
         subplt.plot(dataX, dataY, markerColor + markerStyle)
         subplt.set_title(xStat + " vs " + yStat)
         subplt.set_xlabel(xStat)
         subplt.set_ylabel(yStat)
 
-        # Get figure into window
-        canvas = FigureCanvasTkAgg(fig, master=self.root)
-        canvas.show()
-        canvas.get_tk_widget().grid(row=6, column=1, columnspan=10)
+        # Get figure into window (and remove old one if needed)
+        if self.canvas is not None:
+            self.canvas.get_tk_widget().grid_forget()
+        self.canvas = FigureCanvasTkAgg(fig, master=self.root)
+        self.canvas.show()
+        self.canvas.get_tk_widget().grid(row=6, column=1, columnspan=100, pady=10)
 
     def display(self):
         ''' Calls mainloop() to show the window '''
