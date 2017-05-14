@@ -46,7 +46,3 @@ class Base(metaclass=ABCMeta):  # lint:ok
     @property
     def id(self):
         return self._id
-
-    @abstractmethod
-    def getStats(self, year, stat):
-        pass

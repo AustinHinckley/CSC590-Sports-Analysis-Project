@@ -59,10 +59,12 @@ class Team(Base):
         if isinstance(years, int):
             # convert it to a list
             years = list(years)
+        yearsActive = self._stats.getYearsActive()
         for yr in years:
             # dev guard to prevent unnecessary TypeErrors
             if self._stats is not None:
-                ans.append(self._stats.getStatFromYear(years[yr], stat))
+                if yr in yearsActive:
+                    ans.append(self._stats.getStatFromYear(yr, stat))
         return ans
 
     def getStatFromAllYears(self, stat):

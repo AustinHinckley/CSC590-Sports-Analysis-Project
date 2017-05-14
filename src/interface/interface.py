@@ -10,7 +10,7 @@ from matplotlib.figure import Figure
 # Project files/classes
 from stats.base.Stats import *
 from stats.base.Base import *
-#from stats.Team import *
+from stats.Team import *
 #from stats.Player import *
 
 pidx, yrx, teamx = 0, 1, 3
@@ -262,7 +262,7 @@ class Interface:
             # Get ALL teams' stat totals
             xStatList = []
             yStatList = []
-            for tm in self.teams:
+            for tm in self.teams[1:]:    # Skip 'All'
                 teamObj = Team(tm)
                 teamObj.setStats(self.lines)
                 xStatList += teamObj.getStatFromYearRange(xStat, years)
