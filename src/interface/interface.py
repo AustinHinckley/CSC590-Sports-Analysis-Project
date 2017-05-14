@@ -6,6 +6,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from scipy.stats.stats import pearsonr
 
 # Project files/classes
 from stats.base.Stats import *
@@ -20,12 +21,13 @@ class Interface:
     WINDOW_TITLE = "Baseball Plot GUI"
     STATS = ['G','AB','R','H','2B','3B','HR','RBI','SB','CS','BB','SO','HBP','GIDP']
 
-    def __init__(self, lines, minWidth=1000, minHeight=800):
+    def __init__(self, lines, minWidth=800, minHeight=600):
         ''' Initialize root window and widgets '''
         self.root = Tk()
         self.root.minsize(width=minWidth, height=minHeight)
         self.root.title(Interface.WINDOW_TITLE)
         self.canvas = None    # Canvas for plot
+        self.corrLabel = None    # Text for correlation coefficient
 
         # Set other variables
         self.error = False
@@ -301,6 +303,14 @@ class Interface:
         self.canvas = FigureCanvasTkAgg(fig, master=self.root)
         self.canvas.show()
         self.canvas.get_tk_widget().grid(row=6, column=1, columnspan=100, pady=10)
+
+        # Add correlation eoefficient (and remove previous if necessary)
+        if self.corrLabel is not None:
+            self.corrLabel.grid_forget()
+        corr = pearsonr(dataX, dataY)
+        corrText = "Correlation coefficient:\t" + str(round(corr[0], 5))
+        self.corrLabel = Label(self.root, text=corrText)
+        self.corrLabel.grid(row=7, column=1, columnspan=50, sticky=W)
 
     def display(self):
         ''' Calls mainloop() to show the window '''
