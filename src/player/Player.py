@@ -6,3 +6,10 @@ class Player(Base):
     '''
     def __init__(self):
         Base.__init__()
+
+    @property
+    def years(self):
+        pass
+
+    @years.setter
+    def years(self, years)
