@@ -243,6 +243,7 @@ class Interface:
         # Create objects as necessary and pass data to plot function
         years = range(startYear, endYear + 1)
         if pid != 'All':
+            # Get player stat totals for each year
             if self.player is None or self.player.id != pid:
                 self.player = Player(pid)
                 self.player.setStats(self.lines)
@@ -250,6 +251,7 @@ class Interface:
             yStatList = self.player.getStatFromYearRange(yStat, years)
             self._createPlot(xStatList, yStatList, '.', 'r')
         elif teamID != 'All':
+            # Get team stat totals for each year (sum of all players' totals)
             if self.team is None or self.team.id != teamID:
                 self.team = Team(teamID)
                 self.team.setStats(self.lines)
@@ -257,16 +259,14 @@ class Interface:
             yStatList = self.team.getStatFromYearRange(yStat, years)
             self._createPlot(xStatList, yStatList, '.', 'b')
         else:
-            # This is the same as getStatFromYearRange...maybe rework?
-            if self.allStats is None:
-                self.allStats = Stats(self.lines)    # Generic stats
+            # Get ALL teams' stat totals
             xStatList = []
             yStatList = []
-            for yr in years:
-                xStatList.append(self.allStats.getStatFromYear(yr, xStat))
-                yStatList.append(self.allStats.getStatFromYear(yr, yStat))
-            # xStatList = [1, 2, 3, 4, 5, 6]
-            # yStatList = [4, 8, 15, 16, 23, 42]
+            for tm in self.teams:
+                teamObj = Team(tm)
+                teamObj.setStats(self.lines)
+                xStatList += teamObj.getStatFromYearRange(xStat, years)
+                yStatList += teamObj.getStatFromYearRange(yStat, years)
             self._createPlot(xStatList, yStatList, '.', 'g')
 
 
