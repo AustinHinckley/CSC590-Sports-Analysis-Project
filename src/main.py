@@ -9,6 +9,10 @@ Team Members:
     5) Joshua Yamdogo
 
 This file gets data from a CSV file and initializes the user-interface.
+
+*** NOTE: If the program crashes, try reinstalling matplotlib with pip: ***
+    pip uninstall matplotlib
+    pip install matplotlib
 '''
 from readers.Read import *
 from interface.interface import *
