@@ -1,5 +1,14 @@
-''' Main program -- this will import all classes, initialize the interface, etc.
-    It may do more depending on how much functionality is implemented elsewhere.
+'''
+CSC 590 Group 1 Final Project
+Date: May 15, 2017
+Team Members:
+    1) James Hibben
+    2) Joosung Lee
+    3) Darren Williams
+    4) Austin Hinckley
+    5) Joshua Yamdogo
+
+This file gets data from a CSV file and initializes the user-interface.
 '''
 from readers.Read import *
 from stats.base.Base import *
