@@ -214,6 +214,9 @@ class Interface:
             self.teamMenu['menu'].delete(0, 'end')
             self.playerMenu['menu'].delete(0, 'end')
 
+            # Sort the years before putting them to use
+            self.years = sorted(self.years)
+
             # Set new menu lists
             for yr in self.years:
                 self.startYearMenu['menu'].add_command(label=yr, command=lambda v=yr: self.startYearVar.set(v))
