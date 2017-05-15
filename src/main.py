@@ -11,8 +11,6 @@ Team Members:
 This file gets data from a CSV file and initializes the user-interface.
 '''
 from readers.Read import *
-from stats.base.Base import *
-from stats.base.Stats import *
 from interface.interface import *
 
 def main():

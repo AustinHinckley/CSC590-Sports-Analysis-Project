@@ -22,19 +22,18 @@ class Interface:
     STATS = ['G','AB','R','H','2B','3B','HR','RBI','SB','CS','BB','SO','HBP','GIDP']
 
     def __init__(self, lines, minWidth=800, minHeight=600):
-        ''' Initialize root window and widgets '''
+        # Initialize root window and other window-related variables
         self.root = Tk()
         self.root.minsize(width=minWidth, height=minHeight)
         self.root.title(Interface.WINDOW_TITLE)
         self.canvas = None    # Canvas for plot
-        self.corrLabel = None    # Text for correlation coefficient
 
         # Set other variables
         self.error = False
         self.errorLabel = None
+        self.corrLabel = None    # Text for correlation coefficient
         self.team = None    # Team object
         self.player = None    # Player object
-        self.allStats = None    # Base object
 
         # Get values from the file that will go in dropdown menus
         self.lines = lines    # It would be great to not have to do this
@@ -77,7 +76,7 @@ class Interface:
 
         # Get sorted list of teams and players
         self.teams = ['All'] + sorted(teamSet)
-        self.players = ['All']
+        self.players = ['All']    # No players when all teams selected
 
 
     def _createWidgets(self):

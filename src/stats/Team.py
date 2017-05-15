@@ -1,7 +1,3 @@
-'''
-Contains code for
-'''
-
 # Code for generic relative imports
 import os
 import sys
